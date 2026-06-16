@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lahori Restaurant – Desi Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1008;
+      --surface:   #251808;
+      --card:      #2e1e0a;
+      --border:    #4a2e0e;
+      --gold:      #c8922a;
+      --gold-light:#e8b84b;
+      --cream:     #f5e8cc;
+      --muted:     #a08060;
+      --green:     #5a8a3c;
+      --red:       #c0392b;
+      --text:      #f0dbb8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 60% 0%, #3d1f00 0%, #1a1008 65%);
+      padding: 60px 24px 50px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(200,146,42,.03) 18px, rgba(200,146,42,.03) 19px),
+        repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(200,146,42,.03) 18px, rgba(200,146,42,.03) 19px);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: -.01em;
+    }
+    .hero h1 span { color: var(--gold-light); }
+    .hero-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-top: 8px;
+      direction: rtl;
+      display: block;
+    }
+    .hero-sub {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 300;
+      letter-spacing: .04em;
+    }
+    .hero-divider {
+      margin: 28px auto 0;
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26,16,8,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 12px 0;
+      max-width: 960px;
+      margin: 0 auto;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      flex-shrink: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold-light); }
+    .filter-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #1a1008;
+      font-weight: 600;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      max-width: 960px;
+      margin: 28px auto 0;
+      padding: 0 16px;
+    }
+    .search-box {
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: .9rem;
+      padding: 11px 16px 11px 44px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-box input::placeholder { color: var(--muted); }
+    .search-box input:focus { border-color: var(--gold); }
+    .search-box .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    /* ── SECTIONS ── */
+    .menu-main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 60px;
+    }
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .section-icon { font-size: 1.6rem; line-height: 1; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── GRID ── */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 14px;
+    }
+
+    /* ── CARD ── */
+    .item-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 18px 16px;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .item-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s;
+    }
+    .item-card:hover { transform: translateY(-3px); border-color: var(--gold); box-shadow: 0 8px 24px rgba(200,146,42,.12); }
+    .item-card:hover::after { transform: scaleX(1); }
+    .item-card.hidden { display: none; }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+    .item-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      font-size: .85rem;
+      color: var(--gold);
+      direction: rtl;
+      display: block;
+      margin-top: 1px;
+    }
+    .item-price {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      white-space: nowrap;
+    }
+    .item-price span { font-size: .72rem; font-weight: 400; color: var(--muted); }
+
+    .item-desc {
+      margin-top: 8px;
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-bottom {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .badge-veg  { background: rgba(90,138,60,.15); color: #7ec85a; border: 1px solid rgba(90,138,60,.3); }
+    .badge-non  { background: rgba(192,57,43,.12); color: #e87060; border: 1px solid rgba(192,57,43,.25); }
+    .badge-hot  { background: rgba(200,100,10,.15); color: #e8a050; border: 1px solid rgba(200,100,10,.3); }
+
+    .add-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .add-btn:hover { background: var(--gold); color: #1a1008; }
+    .add-btn.added { background: var(--gold); color: #1a1008; }
+
+    /* ── CART BUBBLE ── */
+    .cart-bubble {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: var(--gold);
+      color: #1a1008;
+      border: none;
+      border-radius: 50px;
+      font-size: .88rem;
+      font-weight: 700;
+      padding: 13px 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(200,146,42,.4);
+      transition: transform .2s, box-shadow .2s;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 200;
+    }
+    .cart-bubble.visible { display: flex; }
+    .cart-bubble:hover { transform: scale(1.05); box-shadow: 0 6px 28px rgba(200,146,42,.5); }
+    .cart-count {
+      background: #1a1008;
+      color: var(--gold-light);
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      font-size: .72rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      z-index: 300;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 540px;
+      padding: 24px 20px 32px;
+      transform: translateY(30px);
+      transition: transform .25s;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); }
+    .modal-close { background: var(--card); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
+    .modal-close:hover { color: var(--cream); }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 8px;
+    }
+    .cart-item-name { font-size: .9rem; color: var(--text); font-weight: 500; }
+    .cart-item-price { color: var(--gold-light); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+    .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: .9rem; font-weight: 700; }
+    .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .qty-num { font-size: .9rem; width: 20px; text-align: center; font-weight: 600; }
+    .cart-total { display: flex; justify-content: space-between; margin-top: 20px; font-weight: 700; font-size: 1rem; color: var(--cream); }
+    .cart-total span { color: var(--gold-light); font-size: 1.1rem; }
+    .order-btn {
+      margin-top: 16px;
+      width: 100%;
+      background: var(--gold);
+      color: #1a1008;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px;
+      cursor: pointer;
+      transition: background .15s;
+      letter-spacing: .04em;
+    }
+    .order-btn:hover { background: var(--gold-light); }
+    .empty-cart { text-align: center; color: var(--muted); font-size: .9rem; padding: 20px 0; }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 24px 16px;
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .04em;
+    }
+    .footer strong { color: var(--gold); }
+
+    @media (max-width: 500px) {
+      .items-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">Est. 2001 · Lahore, Pakistan</div>
+  <h1>Lahori<span> Restaurant</span><br><small style="font-size:.45em;letter-spacing:.08em;font-weight:400;color:var(--muted)">LAHORI RESTAURANT</small></h1>
+  <span class="hero-urdu">لاہوری ریستوران میں خوش آمدید</span>
+  <p class="hero-sub">Authentic Desi Flavours · Fresh & Halal · Dine In / Takeaway</p>
+  <div class="hero-divider"></div>
+</header>
+
+<!-- STICKY FILTER -->
+<div class="filter-wrap">
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-cat="all">🍽 All</button>
+    <button class="filter-btn" data-cat="breads">🫓 Breads</button>
+    <button class="filter-btn" data-cat="chicken">🍗 Chicken</button>
+    <button class="filter-btn" data-cat="mutton">🥩 Mutton</button>
+    <button class="filter-btn" data-cat="daal">🫘 Daal</button>
+    <button class="filter-btn" data-cat="sabzi">🥬 Sabzi</button>
+    <button class="filter-btn" data-cat="rice">🍚 Rice</button>
+    <button class="filter-btn" data-cat="drinks">🥤 Drinks</button>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search menu items…" autocomplete="off"/>
+  </div>
+</div>
+
+<!-- MENU -->
+<main class="menu-main" id="menuMain"></main>
+
+<!-- CART BUBBLE -->
+<button class="cart-bubble" id="cartBubble" onclick="openCart()">
+  🛒 View Order <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<!-- CART MODAL -->
+<div class="modal-overlay" id="cartModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🛒 Your Order</span>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total">Total: <span id="cartTotal">Rs 0</span></div>
+    <button class="order-btn" onclick="placeOrder()">Place Order →</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <strong>Lahori Restaurant</strong> · Open Daily 11am – 12am · 📞 042-3456-7890
+</footer>
+
+<script>
+  // ── DATA ──────────────────────────────────────────────────────────────────
+  const MENU = [
+    // BREADS
+    { id:1,  cat:'breads', name:'Roti',         urdu:'روٹی',           price:20,  badge:'veg',  desc:'Freshly baked tandoori wheat bread, soft & hot.' },
+    { id:2,  cat:'breads', name:'Naan',          urdu:'نان',            price:30,  badge:'veg',  desc:'Leavened white bread baked in the clay tandoor.' },
+    { id:3,  cat:'breads', name:'Sheermal',      urdu:'شیرمال',         price:40,  badge:'veg',  desc:'Sweet saffron-infused naan, a Lahori classic.' },
+    { id:4,  cat:'breads', name:'Paratha',       urdu:'پراٹھہ',         price:35,  badge:'veg',  desc:'Layered whole-wheat flatbread, pan-fried in desi ghee.' },
+    { id:5,  cat:'breads', name:'Peshwari Naan', urdu:'پشاوری نان',     price:50,  badge:'veg',  desc:'Stuffed with nuts, coconut & raisins — a treat.' },
+
+    // CHICKEN
+    { id:6,  cat:'chicken', name:'Chicken Kabab',       urdu:'چکن کباب',       price:160, badge:'non', desc:'Juicy seekh kababs marinated in garam masala & herbs.' },
+    { id:7,  cat:'chicken', name:'Chicken Karahi',      urdu:'چکن کڑاہی',      price:550, badge:'hot', desc:'Half kg wok-cooked chicken in tomatoes & desi spices.' },
+    { id:8,  cat:'chicken', name:'Chicken Tikka',       urdu:'چکن تکہ',        price:480, badge:'non', desc:'Marinated boneless pieces grilled over live coal.' },
+    { id:9,  cat:'chicken', name:'Chicken Handi',       urdu:'چکن ہانڈی',      price:520, badge:'non', desc:'Slow-cooked creamy handi with whole spices.' },
+    { id:10, cat:'chicken', name:'Murgh Cholay',        urdu:'مرغ چھولے',      price:340, badge:'hot', desc:'Chickpeas & chicken braised together — street food fav.' },
+
+    // MUTTON
+    { id:11, cat:'mutton', name:'Mutton Karahi',  urdu:'مٹن کڑاہی',     price:950, badge:'hot', desc:'Classic karahi, 500g tender mutton in a cast-iron wok.' },
+    { id:12, cat:'mutton', name:'Paya',           urdu:'پائے',           price:320, badge:'non', desc:'Slow-cooked trotters in aromatic broth — best at dawn.' },
+    { id:13, cat:'mutton', name:'Nihari',         urdu:'نہاری',          price:380, badge:'hot', desc:'Rich braised beef shank, slow-cooked overnight.' },
+    { id:14, cat:'mutton', name:'Mutton Biryani', urdu:'مٹن بریانی',    price:420, badge:'non', desc:'Aromatic basmati layered with slow-cooked mutton.' },
+    { id:15, cat:'mutton', name:'Shami Kabab',    urdu:'شامی کباب',      price:200, badge:'non', desc:'4 pcs of pan-fried minced meat patties, crispy outside.' },
+
+    // DAAL
+    { id:16, cat:'daal', name:'Daal Chana',    urdu:'دال چنا',    price:180, badge:'veg',  desc:'Split Bengal gram cooked with ginger, garlic & tarka.' },
+    { id:17, cat:'daal', name:'Daal Maash',    urdu:'دال ماش',    price:180, badge:'veg',  desc:'Urad lentils tempered with cumin & dried red chillies.' },
+    { id:18, cat:'daal', name:'Daal Makhani',  urdu:'دال مکھنی',  price:220, badge:'veg',  desc:'Buttery black lentils simmered for hours on slow heat.' },
+    { id:19, cat:'daal', name:'Daal Tarka',    urdu:'دال تڑکہ',   price:170, badge:'veg',  desc:'Mixed lentils finished with ghee tarka & fresh coriander.' },
+    { id:20, cat:'daal', name:'Daal Palak',    urdu:'دال پالک',   price:190, badge:'veg',  desc:'Moong dal blended with spinach — healthy & flavourful.' },
+
+    // SABZI
+    { id:21, cat:'sabzi', name:'Aloo Gosht',       urdu:'آلو گوشت',       price:350, badge:'non', desc:'Potato & mutton in a thick masala gravy.' },
+    { id:22, cat:'sabzi', name:'Bhindi Masala',    urdu:'بھنڈی مصالحہ',   price:180, badge:'veg', desc:'Stir-fried okra with onions, tomatoes & spices.' },
+    { id:23, cat:'sabzi', name:'Aloo Matar',       urdu:'آلو مٹر',        price:160, badge:'veg', desc:'Green peas & potato in a home-style tomato curry.' },
+    { id:24, cat:'sabzi', name:'Saag',             urdu:'ساگ',            price:220, badge:'veg', desc:'Mustard leaf saag cooked with white butter & makai.' },
+    { id:25, cat:'sabzi', name:'Karela Gosht',     urdu:'کریلہ گوشت',     price:300, badge:'hot', desc:'Bitter gourd cooked with tender meat & caramelized onion.' },
+    { id:26, cat:'sabzi', name:'Mix Vegetables',   urdu:'مکس سبزیاں',     price:200, badge:'veg', desc:'Seasonal vegetables sautéed in desi masala.' },
+
+    // RICE
+    { id:27, cat:'rice', name:'Zeera Rice',       urdu:'زیرہ چاول',      price:120, badge:'veg', desc:'Fluffy basmati tossed with cumin & desi ghee.' },
+    { id:28, cat:'rice', name:'Chicken Biryani',  urdu:'چکن بریانی',     price:350, badge:'non', desc:'Layered rice with bone-in chicken & fried onion.' },
+    { id:29, cat:'rice', name:'Plain Rice',       urdu:'سادہ چاول',      price:90,  badge:'veg', desc:'Steamed basmati, goes best with any daal or curry.' },
+    { id:30, cat:'rice', name:'Khichdi',          urdu:'کھچڑی',          price:130, badge:'veg', desc:'Rice & moong dal slow-cooked together — comfort food.' },
+
+    // DRINKS
+    { id:31, cat:'drinks', name:'Lassi (Sweet)',  urdu:'میٹھی لسی',    price:80,  badge:'veg', desc:'Chilled thick yoghurt drink, Lahori style.' },
+    { id:32, cat:'drinks', name:'Lassi (Salted)', urdu:'نمکین لسی',    price:70,  badge:'veg', desc:'Tangy salted lassi with a pinch of roasted cumin.' },
+    { id:33, cat:'drinks', name:'Shikanjvi',      urdu:'شکنجبی',       price:60,  badge:'veg', desc:'Fresh lemon sherbet with black salt & mint.' },
+    { id:34, cat:'drinks', name:'Kashmiri Chai',  urdu:'کشمیری چائے',  price:90,  badge:'veg', desc:'Pink milk tea with pistachios, almonds & cardamom.' },
+    { id:35, cat:'drinks', name:'Ginger Tea',     urdu:'ادرک والی چائے', price:50, badge:'veg', desc:'Strong desi chai brewed with fresh ginger & elaichi.' },
+  ];
+
+  // ── GROUP BY CATEGORY ────────────────────────────────────────────────────
+  const CATS = [
+    { id:'breads',  label:'Breads & Roti',     icon:'🫓' },
+    { id:'chicken', label:'Chicken Dishes',    icon:'🍗' },
+    { id:'mutton',  label:'Mutton & Beef',     icon:'🥩' },
+    { id:'daal',    label:'Daal Dishes',       icon:'🫘' },
+    { id:'sabzi',   label:'Sabzi & Vegetables',icon:'🥬' },
+    { id:'rice',    label:'Rice & Biryani',    icon:'🍚' },
+    { id:'drinks',  label:'Drinks',            icon:'🥤' },
+  ];
+
+  // ── STATE ────────────────────────────────────────────────────────────────
+  let activeFilter = 'all';
+  let searchQuery  = '';
+  let cart = {}; // { id: qty }
+
+  // ── RENDER ───────────────────────────────────────────────────────────────
+  function buildMenu() {
+    const main = document.getElementById('menuMain');
+    main.innerHTML = '';
+
+    CATS.forEach(cat => {
+      const items = MENU.filter(i => i.cat === cat.id);
+      const sec = document.createElement('div');
+      sec.className = 'section';
+      sec.dataset.cat = cat.id;
+
+      sec.innerHTML = `
+        <div class="section-header">
+          <span class="section-icon">${cat.icon}</span>
+          <span class="section-title">${cat.label}</span>
+          <div class="section-line"></div>
+        </div>
+        <div class="items-grid" id="grid-${cat.id}">
+          ${items.map(item => cardHTML(item)).join('')}
+        </div>`;
+      main.appendChild(sec);
+    });
+
+    attachCardEvents();
+    applyFilters();
+  }
+
+  function cardHTML(item) {
+    const badgeLabel = item.badge === 'veg' ? '🟢 Veg' : item.badge === 'hot' ? '🌶 Spicy' : '🔴 Non-Veg';
+    const badgeClass = `badge-${item.badge}`;
+    return `
+      <div class="item-card" data-id="${item.id}" data-cat="${item.cat}" data-name="${item.name.toLowerCase()}">
+        <div class="card-top">
+          <div>
+            <span class="item-name">${item.name}</span>
+            <span class="item-urdu">${item.urdu}</span>
+          </div>
+          <span class="item-price">Rs ${item.price}<br><span>/ serving</span></span>
+        </div>
+        <p class="item-desc">${item.desc}</p>
+        <div class="card-bottom">
+          <span class="badge ${badgeClass}">${badgeLabel}</span>
+          <button class="add-btn" data-id="${item.id}">+ Add</button>
+        </div>
+      </div>`;
+  }
+
+  function attachCardEvents() {
+    document.querySelectorAll('.add-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = +btn.dataset.id;
+        cart[id] = (cart[id] || 0) + 1;
+        btn.textContent = `✓ Added (${cart[id]})`;
+        btn.classList.add('added');
+        updateCartBubble();
+      });
+    });
+  }
+
+  // ── FILTERS ──────────────────────────────────────────────────────────────
+  function applyFilters() {
+    const q = searchQuery.trim().toLowerCase();
+
+    document.querySelectorAll('.item-card').forEach(card => {
+      const catMatch = activeFilter === 'all' || card.dataset.cat === activeFilter;
+      const nameMatch = !q || card.dataset.name.includes(q);
+      card.classList.toggle('hidden', !(catMatch && nameMatch));
+    });
+
+    // Hide empty sections
+    document.querySelectorAll('.section').forEach(sec => {
+      const visible = [...sec.querySelectorAll('.item-card')].some(c => !c.classList.contains('hidden'));
+      sec.style.display = visible ? '' : 'none';
+    });
+  }
+
+  document.getElementById('filterBar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.cat;
+    applyFilters();
+  });
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    applyFilters();
+  });
+
+  // ── CART ─────────────────────────────────────────────────────────────────
+  function updateCartBubble() {
+    const total = Object.values(cart).reduce((a, b) => a + b, 0);
+    const bubble = document.getElementById('cartBubble');
+    document.getElementById('cartCount').textContent = total;
+    bubble.classList.toggle('visible', total > 0);
+  }
+
+  function openCart() {
+    renderCartModal();
+    document.getElementById('cartModal').classList.add('open');
+  }
+  function closeCart() {
+    document.getElementById('cartModal').classList.remove('open');
+  }
+
+  function renderCartModal() {
+    const wrap = document.getElementById('cartItems');
+    const ids = Object.keys(cart).filter(k => cart[k] > 0);
+    if (!ids.length) {
+      wrap.innerHTML = '<p class="empty-cart">Your order is empty. Add some items!</p>';
+      document.getElementById('cartTotal').textContent = 'Rs 0';
+      return;
+    }
+    let total = 0;
+    wrap.innerHTML = ids.map(id => {
+      const item = MENU.find(i => i.id === +id);
+      const sub = item.price * cart[id];
+      total += sub;
+      return `
+        <div class="cart-item">
+          <span class="cart-item-name">${item.name}</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+            <span class="qty-num">${cart[id]}</span>
+            <button class="qty-btn" onclick="changeQty(${id},1)">+</button>
+          </div>
+          <span class="cart-item-price">Rs ${sub}</span>
+        </div>`;
+    }).join('');
+    document.getElementById('cartTotal').textContent = `Rs ${total}`;
+  }
+
+  function changeQty(id, delta) {
+    cart[id] = Math.max(0, (cart[id] || 0) + delta);
+    if (cart[id] === 0) {
+      delete cart[id];
+      // reset button text
+      const btn = document.querySelector(`.add-btn[data-id="${id}"]`);
+      if (btn) { btn.textContent = '+ Add'; btn.classList.remove('added'); }
+    } else {
+      const btn = document.querySelector(`.add-btn[data-id="${id}"]`);
+      if (btn) btn.textContent = `✓ Added (${cart[id]})`;
+    }
+    updateCartBubble();
+    renderCartModal();
+  }
+
+  function placeOrder() {
+    closeCart();
+    cart = {};
+    updateCartBubble();
+    document.querySelectorAll('.add-btn').forEach(b => { b.textContent = '+ Add'; b.classList.remove('added'); });
+    setTimeout(() => alert('🎉 Shukria! Your order has been placed.\nWe\'ll prepare it fresh for you!'), 200);
+  }
+
+  // Close modal on overlay click
+  document.getElementById('cartModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('cartModal')) closeCart();
+  });
+
+  // ── INIT ─────────────────────────────────────────────────────────────────
+  buildMenu();
+</script>
+</body>
+</html>
